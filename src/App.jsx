@@ -1,24 +1,57 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-
-import { ImageLink } from "./components/ImageLink";
+import { Routes, Route } from "react-router";
+import React, { useState } from "react";
+import { NewContact } from "./components/NewContact";
+import { Agenda } from "./Agenda";
+import { UpdateContact } from "./components/UpdateContact";
+import { getContactsReq } from "./services/api";
 
 export const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [user] = useState("celse");
+
+  const refreshData = () => {
+    getContactsReq(user).then((data) => {
+      setContacts(data);
+    });
+  };
+
   return (
     <>
-      <div>
-        <ImageLink src={viteLogo} alt={"Vite logo"} href={"https://vite.dev"} />
-        <ImageLink
-          src={reactLogo}
-          alt={"React logo"}
-          href={"https://react.dev"}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Agenda
+              refreshData={refreshData}
+              user={user}
+              contacts={contacts}
+              setContacts={setContacts}
+            />
+          }
         />
-      </div>
-      <h1>Vite + React</h1>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <Route
+          path="/contact"
+          element={
+            <NewContact
+              refreshData={refreshData}
+              user={user}
+              setContacts={setContacts}
+            />
+          }
+        />
+        <Route
+          path="/contact/update/:contactId"
+          element={
+            <UpdateContact
+              refreshData={refreshData}
+              user={user}
+              contacts={contacts}
+              setContacts={setContacts}
+            />
+          }
+        />
+        <Route path="*" element={<h1>Not found!</h1>} />
+      </Routes>
     </>
   );
 };
