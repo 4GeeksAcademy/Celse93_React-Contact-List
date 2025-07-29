@@ -28,7 +28,7 @@ export const UpdateContact = ({ user, refreshData }) => {
       address: inputObj.address ? inputObj.address : state.address,
     };
 
-    updateContactReq(user, `${contactId}`, requestBody).then(refreshData);
+    updateContactReq(user, contactId, requestBody).then(refreshData);
 
     setInputObj({ name: "", email: "", phone: "", address: "" });
 
@@ -71,10 +71,6 @@ export const UpdateContact = ({ user, refreshData }) => {
 
   const handleOnClick = () => {
     areInputsOk ? updateContact() : alert("Form is incorrect");
-    console.log(isInputNameOk);
-    console.log(isInputEmailOk);
-    console.log(isInputPhoneOk);
-    console.log(isInputAddressOk);
   };
 
   return (
